@@ -11,12 +11,15 @@ A fork of Zenteon's ever growing list of beautiful lightweight effects to enhanc
 
 
 **Current Effects list:**
-NOTE: AAll provided Discord links point to the ORIGINAL creator's server, NOT mine!
+
+*NOTE: All provided Discord links point to the ORIGINAL creator's server, NOT mine!*
 
     DAMP RT RF (ZN_DAMP_RT_FX.fx)
 A modified version of DAMP RT with reflections and code bugfixes
 Note: Any questions regarding settings and performance can be answered in the
 Zentient Effects Discord: https://discord.gg/VYbuG5d3vR
+    
+    
     
     DAMP RT (ZN_DAMP_RT.fx)
 The sucessor to SDIL, DAMP RT (Depth-Aware Mipmapped Ray Tracing) is an extremely efficient Ray Tracing shader with great performance and compettitive quality to other comparable shaders.
@@ -26,11 +29,15 @@ Current Release Version A26
 Note: Any questions regarding settings and performance can be answered in the
 Zentient Effects Discord: https://discord.gg/VYbuG5d3vR
 
+    
+    
     Zentient Stylize (ZN_Stylize.fx)
 ![Starfield 2024-03-10 21-15-39](https://github.com/Zenteon/ZN_FX/assets/162768653/89283d29-43ee-40ca-b8e8-cde51da4b6ba)
 A tasteful pixel art and color curve shader for those tired of realism in games.
 Many configurable options for those who might not want everything it has to offer.
 
+
+    
     Zentient Wireframe (ZN_WF.fx)
 A simple and relatively lightweight shader to display front facing meshes for that "2000's hacker vibe."
 ![SkyrimSE 2024-03-25 11-31-37](https://github.com/Zenteon/ZN_FX/assets/162768653/09ad805e-3b31-4023-8ff7-a3c07b14a914)
