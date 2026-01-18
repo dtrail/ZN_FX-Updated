@@ -15,8 +15,6 @@ NOTE: AAll provided Discord links point to the ORIGINAL creator's server, NOT mi
 
     DAMP RT RF (ZN_DAMP_RT_FX.fx)
 A modified version of DAMP RT with reflections and code bugfixes
-![UnityEmpty3d 2024-03-31 08-17-48](https://github.com/Zenteon/ZN_FX/assets/162768653/4beb46b7-4d33-479f-bf01-a99ca7a389c7)
-![SkyrimSE 2024-04-13 21-15-13](https://github.com/Zenteon/ZN_FX/assets/162768653/da074bda-5ccc-48a1-9fd9-1cd3c0a204f9)
 Note: Any questions regarding settings and performance can be answered in the
 Zentient Effects Discord: https://discord.gg/VYbuG5d3vR
     
