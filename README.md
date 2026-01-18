@@ -1,9 +1,24 @@
 # ZN_FX
 **Zentient ReShade Shaders**
 
-An ever growing list of beautiful lightweight effects to enhance your gaming experience.
+A fork of Zenteon's ever growing list of beautiful lightweight effects to enhance your gaming experience.
+
+**Changes and Fixes:**
+
+- Updated all shaders to work with the recent Reshade builds (6+)
+- Several code bugfixes and optimizations
+- Introduced a new version of the RayTracing shader with performance friendly Screenspace Reflections, originally made by dasstyx
+
 
 **Current Effects list:**
+NOTE: AAll provided Discord links point to the ORIGINAL creator's server, NOT mine!
+
+    DAMP RT RF (ZN_DAMP_RT_FX.fx)
+A modified version of DAMP RT with reflections and code bugfixes
+![UnityEmpty3d 2024-03-31 08-17-48](https://github.com/Zenteon/ZN_FX/assets/162768653/4beb46b7-4d33-479f-bf01-a99ca7a389c7)
+![SkyrimSE 2024-04-13 21-15-13](https://github.com/Zenteon/ZN_FX/assets/162768653/da074bda-5ccc-48a1-9fd9-1cd3c0a204f9)
+Note: Any questions regarding settings and performance can be answered in the
+Zentient Effects Discord: https://discord.gg/VYbuG5d3vR
     
     DAMP RT (ZN_DAMP_RT.fx)
 The sucessor to SDIL, DAMP RT (Depth-Aware Mipmapped Ray Tracing) is an extremely efficient Ray Tracing shader with great performance and compettitive quality to other comparable shaders.
@@ -12,8 +27,6 @@ Current Release Version A26
 ![SkyrimSE 2024-04-13 21-15-13](https://github.com/Zenteon/ZN_FX/assets/162768653/da074bda-5ccc-48a1-9fd9-1cd3c0a204f9)
 Note: Any questions regarding settings and performance can be answered in the
 Zentient Effects Discord: https://discord.gg/VYbuG5d3vR
-
-
 
     Zentient Stylize (ZN_Stylize.fx)
 ![Starfield 2024-03-10 21-15-39](https://github.com/Zenteon/ZN_FX/assets/162768653/89283d29-43ee-40ca-b8e8-cde51da4b6ba)
