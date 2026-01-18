@@ -1,4 +1,4 @@
-# ZN_FX
+# ZN_FX (Raytracing Reflections + Bugfix Update)
 **Zentient ReShade Shaders**
 
 A fork of Zenteon's ever growing list of beautiful lightweight effects to enhance your gaming experience.
