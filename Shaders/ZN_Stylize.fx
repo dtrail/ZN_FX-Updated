@@ -78,32 +78,41 @@ float3 ZN_Stylize_FXmain(float4 vpos : SV_Position, float2 texcoord : TexCoord) 
 {
 	float2 uv = float2(BUFFER_WIDTH, BUFFER_HEIGHT);
 
-	float2 CCV = 1.0 / Pixel_Size * uv;
-	float3 ditherQuant = tex2D(ditherSam, ((texcoord * uv / (512 * Pixel_Size)) - floor(texcoord * uv / (512 * Pixel_Size)))).rgb;	//Allows for downsampling independent of aspect ratio
+    // FIXED: Added max(0.001) to prevent divide by zero if user sets slider to 0
+    float pixelSizeSafe = max(0.001, Pixel_Size);
+
+	float2 CCV = 1.0 / pixelSizeSafe * uv;
+	float3 ditherQuant = tex2D(ditherSam, ((texcoord * uv / (512 * pixelSizeSafe)) - floor(texcoord * uv / (512 * pixelSizeSafe)))).rgb;	//Allows for downsampling independent of aspect ratio
 	float3 TexQuant = tex2D(ReShade::BackBuffer, 0.5 / uv +floor((texcoord * CCV)) / CCV).rgb;
 	float3 input = tex2D(ReShade::BackBuffer, 0.5 / uv + floor((texcoord * CCV)) / CCV).rgb; //quantizes input based on Pixel_Size
 	
 	//Linear Gamma Conversion
-	input = pow(input, 2.2) * Pre_Boost;
+    // FIXED: Added abs() to prevent NaN
+	input = pow(abs(input), 2.2) * Pre_Boost;
 	
 	
 	//Color grading
-	float3 blend = pow(input, Contrast * (1.0 / 2.2));
-	blend.r = ((pow(blend.r, Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(sin (2.04* blend.r), 1.9) );
-	blend.g = ((pow(blend.g, Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(sin (2.02* blend.g), 2.0) );
-	blend.b = ((pow(blend.b, Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(sin (2.02* blend.b), 1.9) );
+    // FIXED: Added abs() to prevent NaN
+	float3 blend = pow(abs(input), Contrast * (1.0 / 2.2));
+	
+    // FIXED: Added abs() to all pow functions below to prevent crashes on negative sine waves
+    blend.r = ((pow(abs(blend.r), Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(abs(sin (2.04* blend.r)), 1.9) );
+	blend.g = ((pow(abs(blend.g), Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(abs(sin (2.02* blend.g)), 2.0) );
+	blend.b = ((pow(abs(blend.b), Bright_Scoop) / 1.77) + 1.0) * (0.8 * pow(abs(sin (2.02* blend.b)), 1.9) );
 	
 	//ACES tonemapping
 	input = ACESFilm(input);
 	
 	//Gamma correction
-	input = pow(input, 1.0 / 2.2);
+    // FIXED: Added abs()
+	input = pow(abs(input), 1.0 / 2.2);
 	
 	//Blending between ACES and Color grade
 	input = lerp(input, blend, ToneGrade_Blend);
 	
 	//Contrast adjustment and dither blending
-	input = pow(((1 - Dither_Strength) * input - Dither_Strength * ditherQuant), Contrast);
+    // FIXED: Changed to max(0.0) to clip negative dither values instead of inverting them
+	input = pow(max(0.0, ((1 - Dither_Strength) * input - Dither_Strength * ditherQuant)), Contrast);
 	
 	//Color Quantization
 	input = round((input) * Color_Quantize) / Color_Quantize;

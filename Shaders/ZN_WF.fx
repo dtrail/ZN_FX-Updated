@@ -1,7 +1,5 @@
 #include "ReShade.fxh"
 
-
-
 uniform float FRAME_BOOST <
 	ui_type = "slider";
 	ui_min = 0.0;
@@ -63,12 +61,7 @@ float4 NormalBuffer(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_
 	}
 	else
 	{
-		
-		
-		
-		
-		 
-		float vx;
+		float vx = 0.0; // FIXED: Init
 		float vxl = vc - eyeDis(texcoord + float2(-1, 0) / uvd, PW);	
 		float vxl2 = vc - eyeDis(texcoord + float2(-2, 0) / uvd, PW);
 		float exlC = lerp(vxl2, vxl, 2.0);
@@ -80,7 +73,7 @@ float4 NormalBuffer(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_
 		if(abs(exlC - vc) > abs(exrC - vc)) {vx = -vxl;}
 		else {vx = vxr;}
 		
-		float vy;
+		float vy = 0.0; // FIXED: Init
 		float vyl = vc - eyeDis(texcoord + float2(0, -1) / uvd, PW);
 		float vyl2 = vc - eyeDis(texcoord + float2(0, -2) / uvd, PW);
 		float eylC = lerp(vyl2, vyl, 2.0);
@@ -113,7 +106,7 @@ float WireFrame(float2 xy)
 		float2 res = float2(BUFFER_WIDTH, BUFFER_HEIGHT);
 	
 		float3 norA = tex2D(NormalSam, xy).xyz;
-		float3 norB;
+		float3 norB = 0.0; // FIXED: CRITICAL! Was uninitialized, causing garbage data.
 		for(int i = 0; i < 2; i++){
 			for(int ii = 0; ii < 2; ii++)
 			{

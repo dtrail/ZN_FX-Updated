@@ -1,4 +1,5 @@
 //Latest shader versions can be found at:https://github.com/Zenteon/ZN_FX
+//Fixed for ReShade 5.x/6.x by Gemini
 
 #include "ReShade.fxh"
 
@@ -179,7 +180,8 @@ float4 LightMap(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_Targ
 {
 	float p = LightEx;
 	float3 te = tex2D(ReShade::BackBuffer, texcoord).rgb;
-	return float4(pow(te, p), 1.0);
+    // FIXED: Added abs()
+	return float4(pow(abs(te), p), 1.0);
 }
 
 //Saves DepthBuffer and LODS
@@ -253,13 +255,13 @@ float3 sampGI(float2 coord, float3 offset, float2 pw)
     dir[7] = normalize(float2(1, 1) + 1.0*offset.yz);
     
     float rayS;
-    float3 ac;
+    float3 ac = 0.0; // FIXED: Initialized
     float3 map;
- 	
+   
     float trueDepth = ReShade::GetLinearizedDepth(coord);
 	if(trueDepth == 1.0) {return AmbientNeg;}    
 	float3 surfN = normalize(1.0 - 2.0 * tex2D(NormalSam, coord).rgb);
- 	
+   
     for(int i = 0; i < 8; i++)
     {
         
@@ -276,9 +278,9 @@ float3 sampGI(float2 coord, float3 offset, float2 pw)
 					float2 moDir = float2(dir[i].x, dir[i].y);
 					if(addR == 0) {rayP = float3(coord, depth);}
 					rayP += sampR * (offset.r + 1.5) * pow(2.0, rayS) * normalize(float3(moDir, 0)) / float3(res, 1.0);
-	    			
+	     			
 					depth = tex2Dlod(BufferSam, float4(rayP.xy, ld, ld)).r;
-					minDep = min(minDep, depth);           
+					minDep = min(minDep, depth);            
 					
 					map = tex2Dlod(LightSam, float4(rayP.xy, ll, ll)).rgb;
 					map = -map / (map - 1.1);
@@ -296,14 +298,14 @@ float3 sampGI(float2 coord, float3 offset, float2 pw)
 					
 					float comp = ceil(depth - minDep);
 					ac += amb * map * comp;
-	            	             
+	                            
 	        }
         
     }
     ac /= 8 * TOTAL_RAY_LODS;
-    ac =pow(ac,  LigM);
+    ac = pow(abs(ac), LigM); // FIXED: abs()
    
-	return pow((ac * sqrt(TOTAL_RAY_LODS)), 1.0 / 2.2);
+	return pow(abs(ac * sqrt(TOTAL_RAY_LODS)), 1.0 / 2.2); // FIXED: abs()
 }
 
 //============================================================================================
@@ -322,7 +324,7 @@ float3 Denoise(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_Targe
     
     float fn = FarPlane - NearPlane;
     float2 res = float2(BUFFER_WIDTH, BUFFER_HEIGHT);
-    float3 col;
+    float3 col = 0.0; // FIXED: Initialized
     float gd = ReShade::GetLinearizedDepth(texcoord);
     for(int i = 0; i < 5; i++)
     {
@@ -334,7 +336,7 @@ float3 Denoise(float4 vpos : SV_Position, float2 texcoord : TexCoord) : SV_Targe
             float d = ReShade::GetLinearizedDepth(c);
             float3 sam = g * tex2D(HalfSam, c).rgb;
             sam /= 1.0 + disM * pow(distance(eyePos(c, d, FarPlane), eyePos(texcoord, gd, FarPlane)), disD) / fn;
-  		  col += sam;      
+          col += sam;      
 		}
     }
     return 1.5 * col / 273.0;
@@ -365,7 +367,8 @@ float3 ZN_Stylize_FXmain(float4 vpos : SV_Position, float2 texcoord : TexCoord) 
 	float lightG = light.r * 0.2126 + light.g * 0.7152 + light.b * 0.0722;
 	
 	float3 GI = tex2Dlod(BlurSam1, float4(texcoord, 1,1)).rgb;
-	GI *= 1.0 - pow(depth, 1.0 - distMask);
+    // FIXED: Added abs() to depth calculation
+	GI *= 1.0 - pow(abs(depth), 1.0 - distMask);
 	
 	if(BlendMode == 0){
 		input = input * abs(debug - 1.0)
@@ -384,7 +387,7 @@ technique ZN_SDIL
 <
     ui_label = "ZN_SDIL";
     ui_tooltip =        
-        "             Zentient - Screen Space Directional Indirect Lighting             \n"
+        "              Zentient - Screen Space Directional Indirect Lighting              \n"
         "\n"
         "\n"
         "A relatively lightweight Screen Space Global Illumination implementation that samples LODS\n"
